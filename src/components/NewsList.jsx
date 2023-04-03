@@ -31,7 +31,6 @@ const NewsList = () => {
     setModalNews(null);
   };
 
-  console.log(news);
   return (
     <>
       <h1 className="text-3xl font-bold mb-4">
