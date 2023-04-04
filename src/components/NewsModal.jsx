@@ -3,6 +3,8 @@ import { AiOutlineCalendar } from "react-icons/ai";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 const NewsModal = ({ newsItem, closeModal }) => {
+  const { title, content, imageUrl, date } = newsItem;
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -17,16 +19,19 @@ const NewsModal = ({ newsItem, closeModal }) => {
                 <MdOutlineArrowBackIosNew className="inline-block mr-1 h-5 w-5 text-blue-600" />
               </div>
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  {newsItem.title}
-                </h3>
+                <h2 className="text-gray-900 font-bold text-2xl mb-6">
+                  {title}
+                </h2>
+                <img
+                  src={imageUrl}
+                  alt={title}
+                  className="w-full mb-6 rounded-lg"
+                />
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">{newsItem.content}</p>
+                  <p className="text-sm text-gray-500">{content}</p>
                   <div className="flex items-center mt-2">
                     <AiOutlineCalendar className="mr-2 mt-2" />
-                    <p className="text-gray-600 text-xs mt-2">
-                      {newsItem.date}
-                    </p>
+                    <p className="text-gray-600 text-xs mt-2">{date}</p>
                   </div>
                 </div>
               </div>

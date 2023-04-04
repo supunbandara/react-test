@@ -10,19 +10,28 @@ const NewsList = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
-    const fetchNews = async () => {
-      const response = await axios.get(
-        `https://inshorts.deta.dev/news?category=${selectedCategory}`
-      );
-      setNews(response.data.data);
+    const getNews = async () => {
+      const newsFromServer = await fetchNews();
+      setNews(newsFromServer.data);
     };
-    fetchNews();
+    getNews();
   }, [selectedCategory]);
 
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
+  // function to fetch the news list from the API
+  const fetchNews = async () => {
+    const res = await fetch(
+      `https://inshorts.deta.dev/news?category=${selectedCategory}`
+    );
+    const data = await res.json();
+    return data;
   };
 
+  // function to handle news category click
+  const handleButtonClick = (category) => {
+    setSelectedCategory(category);
+  };
+
+  // function to handle news item click
   const handleNewsClick = (newsItem) => {
     setModalNews(newsItem);
   };
@@ -32,51 +41,63 @@ const NewsList = () => {
   };
 
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-4">
+    <div className="flex flex-col">
+      <h1 className="text-3xl text-left font-bold mb-4">
         Our <span className="text-blue-600">News</span>
       </h1>
       <div className="flex justify-start items-center mb-4 md:mb-4">
-        <div className="relative mb-4 md:mb-0">
-          <select
-            className="appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            value={selectedCategory}
-            onChange={handleCategoryChange}
+        <div className="flex flex-wrap justify-center my-4">
+          <button
+            className={`border border-blue-600 rounded-lg py-2 px-4 mx-2 my-1 ${
+              selectedCategory === "all" ? "bg-blue-600 text-white" : "bg-white"
+            }`}
+            onClick={() => handleButtonClick("all")}
           >
-            <option value="all">All</option>
-            <option value="national">National</option>
-            <option value="business">Business</option>
-            <option value="sports">Sports</option>
-            <option value="world">World</option>
-            <option value="politics">Politics</option>
-            <option value="technology">Technology</option>
-            <option value="startup">Startup</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="science">Science</option>
-            <option value="automobile">Automobile</option>
-            <option value="miscellaneous">Miscellaneous</option>
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <IoMdArrowDropdown className="mr-2" />
-          </div>
+            All
+          </button>
+          <button
+            className={`border border-blue-600 rounded-lg py-2 px-4 mx-2 my-1 ${
+              selectedCategory === "national"
+                ? "bg-blue-600 text-white"
+                : "bg-white"
+            }`}
+            onClick={() => handleButtonClick("national")}
+          >
+            National
+          </button>
+          <button
+            className={`border border-blue-600 rounded-lg py-2 px-4 mx-2 my-1 ${
+              selectedCategory === "business"
+                ? "bg-blue-600 text-white"
+                : "bg-white"
+            }`}
+            onClick={() => handleButtonClick("business")}
+          >
+            Business
+          </button>
+          <button
+            className={`border border-blue-600 rounded-lg py-2 px-4 mx-2 my-1 ${
+              selectedCategory === "sports"
+                ? "bg-blue-600 text-white"
+                : "bg-white"
+            }`}
+            onClick={() => handleButtonClick("sports")}
+          >
+            Sports
+          </button>
         </div>
       </div>
-
-      <div className="flex flex-col items-center">
-        <div className="flex flex-wrap justify-center w-full">
-          {news.map((newsItem, index) => (
-            <NewsItem
-              key={index}
-              newsItem={newsItem}
-              onNewsClick={handleNewsClick}
-            />
-          ))}
-        </div>
-        {modalNews && (
-          <NewsModal newsItem={modalNews} closeModal={closeModal} />
-        )}
+      <div className="flex flex-wrap justify-center w-full">
+        {news.map((newsItem, index) => (
+          <NewsItem
+            key={index}
+            newsItem={newsItem}
+            onNewsClick={handleNewsClick}
+          />
+        ))}
       </div>
-    </>
+      {modalNews && <NewsModal newsItem={modalNews} closeModal={closeModal} />}
+    </div>
   );
 };
 
